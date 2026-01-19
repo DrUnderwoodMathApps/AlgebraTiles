@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra Tiles - Main Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Skip to main content link for screen readers */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+        }
+
+        .menu-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover, .card:focus {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+            outline: 3px solid #fff;
+            outline-offset: 3px;
+        }
+
+        .card:focus {
+            outline: 3px solid #fff;
+            outline-offset: 3px;
+        }
+
+        .card-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            role: img;
+            aria-label: "Icon";
+        }
+
+        .card-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .card-description {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .card.level-1 {
+            border-top: 5px solid #3498db;
+        }
+
+        .card.level-2 {
+            border-top: 5px solid #9b59b6;
+        }
+
+        .info-box {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 25px;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .info-box h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-box li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .info-box li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .menu-cards {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .card-title {
+                font-size: 1.5em;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .badge.free-play {
+            background: #3498db;
+        }
+
+        .badge.practice {
+            background: #9b59b6;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .card {
+                border: 2px solid #000;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <div class="container">
+        <header class="header">
+            <h1>🧮 Algebra Tiles</h1>
+            <p class="subtitle">Interactive Learning Tool for Algebraic Expressions</p>
+        </header>
+
+        <main id="main-content">
+            <nav aria-label="Main navigation">
+                <div class="menu-cards" role="list">
+                    <a href="algebra-tiles-stable.html" 
+                       class="card level-1" 
+                       role="listitem"
+                       aria-label="Main Workspace - Free play mode for exploring algebraic expressions">
+                        <div class="card-icon" role="img" aria-label="Paint palette icon">🎨</div>
+                        <span class="badge free-play">Free Play</span>
+                        <div class="card-title">Main Workspace</div>
+                        <div class="card-description">
+                            Explore and create your own algebraic expressions with drag-and-drop tiles
+                        </div>
+                    </a>
+
+                    <a href="algebra-tiles-level2.html" 
+                       class="card level-2" 
+                       role="listitem"
+                       aria-label="Level 2 - Practice mode for adding and subtracting algebraic expressions">
+                        <div class="card-icon" role="img" aria-label="Book icon">📚</div>
+                        <span class="badge practice">Practice Mode</span>
+                        <div class="card-title">Level 2: Add & Subtract</div>
+                        <div class="card-description">
+                            Practice adding and subtracting algebraic expressions with guided problems
+                        </div>
+                    </a>
+                </div>
+            </nav>
+
+            <section class="info-box" aria-labelledby="features-heading">
+                <h3 id="features-heading">Features:</h3>
+                <ul>
+                    <li>Colorblind-friendly design (blue for positive, orange for negative)</li>
+                    <li>Proportional tiles: x² (100×100), x (100×10), 1 (10×10)</li>
+                    <li>Keyboard shortcuts for easy manipulation</li>
+                    <li>Drag and drop or use arrow keys to move tiles</li>
+                    <li>Rotate x tiles to create vertical or horizontal orientations</li>
+                    <li>Interactive problem-solving with instant feedback</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
