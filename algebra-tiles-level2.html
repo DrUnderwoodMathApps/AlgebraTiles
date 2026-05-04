@@ -270,16 +270,18 @@
             min-height: 600px;
         }
 
+        /* CHANGED: Work area increased from 40% to 55% */
         .work-area {
             position: relative;
-            height: 40%; /* Top 40% */
+            height: 55%;
             border-bottom: 2px dashed #999;
             padding: 10px;
         }
 
+        /* CHANGED: Zero pairs area decreased from 60% to 45% */
         .zero-pairs-area {
             position: relative;
-            height: 60%; /* Bottom 60% */
+            height: 45%;
             background: #f8f9fa;
             padding: 10px;
         }
@@ -361,44 +363,51 @@
             outline-offset: 2px;
         }
 
-        /* Positive tiles - Blue */
+        /* Positive tiles - Blue — 20% larger: 100→120, 10→12 */
         .tile.x2-pos { 
             background: #4A90E2;
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
+            font-size: 1.1em;
         }
 
         .tile.x-pos { 
             background: #4A90E2;
-            width: 100px;
-            height: 10px;
+            width: 120px;
+            height: 12px;
+            font-size: 0.65em;
         }
 
         .tile.unit-pos { 
             background: #4A90E2;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
+            font-size: 0;
         }
 
-        /* Negative tiles - Orange */
+        /* Negative tiles - Orange — 20% larger */
         .tile.x2-neg { 
             background: #E8833A;
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
+            font-size: 1.1em;
         }
 
         .tile.x-neg { 
             background: #E8833A;
-            width: 100px;
-            height: 10px;
+            width: 120px;
+            height: 12px;
+            font-size: 0.65em;
         }
 
         .tile.unit-neg { 
             background: #E8833A;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
+            font-size: 0;
         }
 
+        /* Palette tiles — 20% larger: 80→96, 10→12 */
         .palette-tile {
             position: relative;
             cursor: pointer;
@@ -422,20 +431,36 @@
 
         .palette-tile.x2-pos,
         .palette-tile.x2-neg {
-            width: 80px;
-            height: 80px;
+            width: 96px;
+            height: 96px;
         }
 
         .palette-tile.x-pos,
         .palette-tile.x-neg {
-            width: 80px;
-            height: 10px;
+            width: 96px;
+            height: 12px;
         }
 
         .palette-tile.unit-pos,
         .palette-tile.unit-neg {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Positive palette tiles: white text on blue */
+        .palette-tile.x2-pos,
+        .palette-tile.x-pos,
+        .palette-tile.unit-pos {
+            background: #4A90E2;
+            color: white;
+        }
+
+        /* Negative palette tiles: white text on orange */
+        .palette-tile.x2-neg,
+        .palette-tile.x-neg,
+        .palette-tile.unit-neg {
+            background: #E8833A;
+            color: white;
         }
 
         .answer-section {
@@ -963,42 +988,44 @@
         }
 
         function placeInitialTiles(expr) {
-            const workAreaRect = workArea.getBoundingClientRect();
+            // CHANGED: Updated spacing for 20% larger tiles
+            // x² tiles: 120px + 12px gap = 132px per slot
+            // x tiles (vertical): 12px wide + 12px gap = 24px per slot
+            // unit tiles: 12px + 6px gap = 18px per slot
             const startX = 50;
             let currentY = 50;
 
-            // Place x² tiles with proper spacing
+            // Place x² tiles
             for (let i = 0; i < Math.abs(expr.x2); i++) {
                 const type = expr.x2 > 0 ? 'x2-pos' : 'x2-neg';
-                const col = i % 5; // 5 tiles per row
+                const col = i % 5;
                 const row = Math.floor(i / 5);
-                const x = startX + col * 110; // 100px tile + 10px spacing
-                const y = currentY + row * 110;
+                const x = startX + col * 132; // 120px tile + 12px spacing
+                const y = currentY + row * 132;
                 createTile(type, x, y, true);
             }
             if (expr.x2 !== 0) {
                 const rows = Math.ceil(Math.abs(expr.x2) / 5);
-                currentY += rows * 110 + 15; // Add spacing between tile types
+                currentY += rows * 132 + 15;
             }
 
-            // Place x tiles VERTICALLY (rotated 90 degrees) with proper spacing
+            // Place x tiles VERTICALLY (rotated 90 degrees)
             for (let i = 0; i < Math.abs(expr.x); i++) {
                 const type = expr.x > 0 ? 'x-pos' : 'x-neg';
-                const x = startX + i * 20; // 20px spacing for vertical tiles
+                const x = startX + i * 24; // 12px wide when rotated + 12px spacing
                 const tile = createTile(type, x, currentY, true);
-                // Rotate to vertical position
                 tile.dataset.rotation = '90';
                 tile.style.transform = 'rotate(90deg)';
             }
-            if (expr.x !== 0) currentY += 120; // Space for rotated tiles + gap
+            if (expr.x !== 0) currentY += 140; // Space for rotated tiles + gap
 
-            // Place unit tiles with proper spacing
+            // Place unit tiles
             for (let i = 0; i < Math.abs(expr.constant); i++) {
                 const type = expr.constant > 0 ? 'unit-pos' : 'unit-neg';
-                const col = i % 20; // 20 tiles per row
+                const col = i % 20;
                 const row = Math.floor(i / 20);
-                const x = startX + col * 15; // 10px tile + 5px spacing
-                const y = currentY + row * 15;
+                const x = startX + col * 18; // 12px tile + 6px spacing
+                const y = currentY + row * 18;
                 createTile(type, x, y, true);
             }
         }
@@ -1011,7 +1038,7 @@
             tile.dataset.id = tileCounter++;
             tile.dataset.rotation = '0';
             tile.dataset.initial = isInitial ? 'true' : 'false';
-            tile.dataset.zone = 'work'; // Track which zone the tile is in
+            tile.dataset.zone = 'work';
             
             const labels = {
                 'x2-pos': 'x²',
@@ -1054,7 +1081,6 @@
 
         canvas.addEventListener('dblclick', function(e) {
             if (e.target.classList.contains('tile')) {
-                // Don't allow deleting initial tiles
                 if (e.target.dataset.initial === 'true') {
                     alert('Cannot delete initial problem tiles. Use "Clear My Tiles" to remove tiles you added.');
                     return;
@@ -1118,16 +1144,13 @@
             
             e.preventDefault();
             
-            // Get mouse position
             const mouseX = e.clientX;
             const mouseY = e.clientY;
             
-            // Get all zone boundaries
             const workAreaRect = workArea.getBoundingClientRect();
             const zeroPairsRect = zeroPairsContent.getBoundingClientRect();
             const removeZoneRect = removeZone.getBoundingClientRect();
             
-            // Determine which zone the mouse is in
             const isInWorkArea = mouseX >= workAreaRect.left && mouseX <= workAreaRect.right &&
                                   mouseY >= workAreaRect.top && mouseY <= workAreaRect.bottom;
             const isInZeroPairs = mouseX >= zeroPairsRect.left && mouseX <= zeroPairsRect.right &&
@@ -1135,7 +1158,6 @@
             const isInRemoveZone = mouseX >= removeZoneRect.left && mouseX <= removeZoneRect.right &&
                                     mouseY >= removeZoneRect.top && mouseY <= removeZoneRect.bottom;
             
-            // Move tile to appropriate zone if needed
             if (isInRemoveZone && draggedElement.dataset.zone !== 'remove') {
                 const zoneContent = removeZone.querySelector('.zone-content');
                 zoneContent.appendChild(draggedElement);
@@ -1151,7 +1173,6 @@
                 draggedElement.style.opacity = '1';
             }
             
-            // Get bounding rect of current parent container
             const parentRect = draggedElement.parentElement.getBoundingClientRect();
             
             let newX = e.clientX - parentRect.left - offsetX;
@@ -1177,8 +1198,8 @@
                 const type = this.dataset.type;
                 const workAreaRect = workArea.getBoundingClientRect();
                 
-                const x = (workAreaRect.width / 2) - 50 + (Math.random() - 0.5) * 100;
-                const y = (workAreaRect.height / 2) - 50 + (Math.random() - 0.5) * 100;
+                const x = (workAreaRect.width / 2) - 60 + (Math.random() - 0.5) * 100;
+                const y = (workAreaRect.height / 2) - 60 + (Math.random() - 0.5) * 100;
                 
                 createTile(type, x, y, false);
             });
@@ -1206,14 +1227,14 @@
             
             let tileWidth, tileHeight;
             if (type.includes('x2')) {
-                tileWidth = 100;
-                tileHeight = 100;
+                tileWidth = 120;
+                tileHeight = 120;
             } else if (type.includes('x-')) {
-                tileWidth = 100;
-                tileHeight = 10;
+                tileWidth = 120;
+                tileHeight = 12;
             } else {
-                tileWidth = 10;
-                tileHeight = 10;
+                tileWidth = 12;
+                tileHeight = 12;
             }
             
             const tilesPerRow = Math.min(Math.ceil(Math.sqrt(quantity)), 10);
@@ -1309,7 +1330,6 @@
 
         function clearCanvas() {
             workArea.innerHTML = '';
-            // Clear zero pairs content
             if (zeroPairsContent) {
                 zeroPairsContent.innerHTML = '';
             }
@@ -1322,26 +1342,20 @@
         }
 
         function parseExpression(expr) {
-            // Parse an algebraic expression into components
-            // Returns an object with x2, x, and constant coefficients
-            
-            // Normalize the expression
-            expr = expr.replace(/\s+/g, ''); // Remove spaces
-            expr = expr.replace(/\*\*/g, '^'); // ** to ^
-            expr = expr.replace(/\^2/g, '²'); // ^2 to ²
-            expr = expr.replace(/x2/gi, 'x²'); // x2 to x²
+            expr = expr.replace(/\s+/g, '');
+            expr = expr.replace(/\*\*/g, '^');
+            expr = expr.replace(/\^2/g, '²');
+            expr = expr.replace(/x2/gi, 'x²');
             expr = expr.toLowerCase();
             
             let x2 = 0;
             let x = 0;
             let constant = 0;
             
-            // Add a '+' at the beginning if the expression doesn't start with a sign
             if (expr[0] !== '+' && expr[0] !== '-') {
                 expr = '+' + expr;
             }
             
-            // Match all terms
             const termRegex = /([+-])\s*(\d*\.?\d*)\s*(x²|x)?/g;
             let match;
             
@@ -1350,10 +1364,8 @@
                 let coefficient = match[2];
                 const variable = match[3];
                 
-                // Skip if no variable and no coefficient
                 if (!variable && !coefficient) continue;
                 
-                // Default coefficient to 1 if not specified
                 if (coefficient === '' && variable) {
                     coefficient = '1';
                 }
@@ -1362,7 +1374,6 @@
                 let value = parseFloat(coefficient);
                 if (sign === '-') value = -value;
                 
-                // Classify the term
                 if (variable === 'x²') {
                     x2 += value;
                 } else if (variable === 'x') {
@@ -1379,7 +1390,6 @@
             const parsed1 = parseExpression(expr1);
             const parsed2 = parseExpression(expr2);
             
-            // Compare with small tolerance for floating point errors
             const tolerance = 0.0001;
             return Math.abs(parsed1.x2 - parsed2.x2) < tolerance &&
                    Math.abs(parsed1.x - parsed2.x) < tolerance &&
@@ -1395,7 +1405,6 @@
             const userAnswer = answerInput.value.trim();
             const correctAnswer = expressionToString(currentProblem.answer);
 
-            // Check if expressions are mathematically equal
             const isCorrect = expressionsEqual(userAnswer, correctAnswer);
 
             feedback.classList.remove('correct', 'incorrect');
@@ -1410,21 +1419,18 @@
             }
         }
 
-        // Allow Enter key to submit
         answerInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 checkAnswer();
             }
         });
 
-        // Quit function
         function quitLevel() {
             if (confirm('Return to main menu?')) {
                 window.location.href = 'index.html';
             }
         }
 
-        // Help function for subtraction problems
         function showHelp() {
             if (!currentProblem || currentProblem.operation !== 'subtract') {
                 return;
@@ -1436,80 +1442,57 @@
             const expr1 = currentProblem.expr1;
             const expr2 = currentProblem.expr2;
 
-            // Calculate how many zero pairs we need to add
             let zeroPairsX2 = 0;
             let zeroPairsX = 0;
             let zeroPairsUnit = 0;
 
-            // For subtraction, we need enough tiles to "take away"
-            // When subtracting a negative, we need to physically remove that negative tile
-            // When subtracting a positive, we need to physically remove that positive tile
-
             if (expr2.x2 < 0) {
-                // Subtracting negative x² means we need to REMOVE negative x² tiles
                 const neededNeg = Math.abs(expr2.x2);
                 const currentNeg = expr1.x2 < 0 ? Math.abs(expr1.x2) : 0;
-                if (neededNeg > currentNeg) {
-                    zeroPairsX2 = neededNeg - currentNeg;
-                }
+                if (neededNeg > currentNeg) zeroPairsX2 = neededNeg - currentNeg;
             } else if (expr2.x2 > 0) {
-                // Subtracting positive x² means we need to REMOVE positive x² tiles
                 const neededPos = expr2.x2;
                 const currentPos = expr1.x2 > 0 ? expr1.x2 : 0;
-                if (neededPos > currentPos) {
-                    zeroPairsX2 = neededPos - currentPos;
-                }
+                if (neededPos > currentPos) zeroPairsX2 = neededPos - currentPos;
             }
 
             if (expr2.x < 0) {
-                // Subtracting negative x means we need to REMOVE negative x tiles
                 const neededNeg = Math.abs(expr2.x);
                 const currentNeg = expr1.x < 0 ? Math.abs(expr1.x) : 0;
-                if (neededNeg > currentNeg) {
-                    zeroPairsX = neededNeg - currentNeg;
-                }
+                if (neededNeg > currentNeg) zeroPairsX = neededNeg - currentNeg;
             } else if (expr2.x > 0) {
-                // Subtracting positive x means we need to REMOVE positive x tiles
                 const neededPos = expr2.x;
                 const currentPos = expr1.x > 0 ? expr1.x : 0;
-                if (neededPos > currentPos) {
-                    zeroPairsX = neededPos - currentPos;
-                }
+                if (neededPos > currentPos) zeroPairsX = neededPos - currentPos;
             }
 
             if (expr2.constant < 0) {
-                // Subtracting negative units means we need to REMOVE negative unit tiles
                 const neededNeg = Math.abs(expr2.constant);
                 const currentNeg = expr1.constant < 0 ? Math.abs(expr1.constant) : 0;
-                if (neededNeg > currentNeg) {
-                    zeroPairsUnit = neededNeg - currentNeg;
-                }
+                if (neededNeg > currentNeg) zeroPairsUnit = neededNeg - currentNeg;
             } else if (expr2.constant > 0) {
-                // Subtracting positive units means we need to REMOVE positive unit tiles
                 const neededPos = expr2.constant;
                 const currentPos = expr1.constant > 0 ? expr1.constant : 0;
-                if (neededPos > currentPos) {
-                    zeroPairsUnit = neededPos - currentPos;
-                }
+                if (neededPos > currentPos) zeroPairsUnit = neededPos - currentPos;
             }
 
-            // Add zero pairs to the zero pairs content area
+            // CHANGED: Updated zero-pair tile spacing for 20% larger tiles
             let pairX = 50;
-            let pairY = 20; // Start with small margin from top of content area
+            let pairY = 20;
 
             let helpText = "Zero pairs added! ";
             let pairsAdded = false;
 
-            // Add x² zero pairs - 2 pairs per row
+            // x² zero pairs — 120px tile + 5px gap between pair + 20px between pairs = 265px per slot
             if (zeroPairsX2 > 0) {
                 helpText += `${zeroPairsX2} x² pair${zeroPairsX2 > 1 ? 's' : ''} `;
                 pairsAdded = true;
                 for (let i = 0; i < zeroPairsX2; i++) {
-                    const col = i % 3; // 3 pairs per row in bottom area
+                    const col = i % 3;
                     const row = Math.floor(i / 3);
-                    const x = pairX + col * 220; // 220px = 2 tiles (100+100) + gap (20)
-                    const y = pairY + row * 115;
-                    
+                    const x = pairX + col * 265; // 120 + 120 + 25 gap
+                    const y = pairY + row * 138; // 120 + 18 gap
+
                     const tile1 = document.createElement('div');
                     tile1.className = 'tile x2-pos';
                     tile1.style.left = x + 'px';
@@ -1520,10 +1503,10 @@
                     tile1.dataset.initial = 'false';
                     tile1.dataset.zone = 'zero-pairs';
                     zeroPairsContent.appendChild(tile1);
-                    
+
                     const tile2 = document.createElement('div');
                     tile2.className = 'tile x2-neg';
-                    tile2.style.left = (x + 105) + 'px';
+                    tile2.style.left = (x + 125) + 'px';
                     tile2.style.top = y + 'px';
                     tile2.textContent = '-x²';
                     tile2.dataset.id = tileCounter++;
@@ -1532,12 +1515,11 @@
                     tile2.dataset.zone = 'zero-pairs';
                     zeroPairsContent.appendChild(tile2);
                 }
-                // Move down for next section
                 const rows = Math.ceil(zeroPairsX2 / 3);
-                pairY += rows * 115 + 10;
+                pairY += rows * 138 + 10;
             }
 
-            // Add x zero pairs
+            // x zero pairs — rotated 90deg, each pair ~30px wide
             if (zeroPairsX > 0) {
                 helpText += `${zeroPairsX} x pair${zeroPairsX > 1 ? 's' : ''} `;
                 pairsAdded = true;
@@ -1554,10 +1536,10 @@
                     tile1.dataset.initial = 'false';
                     tile1.dataset.zone = 'zero-pairs';
                     zeroPairsContent.appendChild(tile1);
-                    
+
                     const tile2 = document.createElement('div');
                     tile2.className = 'tile x-neg';
-                    tile2.style.left = (pairX + 25) + 'px';
+                    tile2.style.left = (pairX + 30) + 'px';
                     tile2.style.top = pairY + 'px';
                     tile2.textContent = '-x';
                     tile2.dataset.id = tileCounter++;
@@ -1566,18 +1548,18 @@
                     tile2.dataset.initial = 'false';
                     tile2.dataset.zone = 'zero-pairs';
                     zeroPairsContent.appendChild(tile2);
-                    
-                    pairX += 50;
+
+                    pairX += 60;
                     if ((i + 1) % 10 === 0) {
                         pairX = 50;
-                        pairY += 115;
+                        pairY += 138;
                     }
                 }
-                if (zeroPairsX % 10 !== 0) pairY += 115;
+                if (zeroPairsX % 10 !== 0) pairY += 138;
                 pairX = 50;
             }
 
-            // Add unit zero pairs
+            // unit zero pairs — 12px tiles + spacing
             if (zeroPairsUnit > 0) {
                 helpText += `${zeroPairsUnit} unit pair${zeroPairsUnit > 1 ? 's' : ''} `;
                 pairsAdded = true;
@@ -1593,10 +1575,10 @@
                     tile1.dataset.initial = 'false';
                     tile1.dataset.zone = 'zero-pairs';
                     zeroPairsContent.appendChild(tile1);
-                    
+
                     const tile2 = document.createElement('div');
                     tile2.className = 'tile unit-neg';
-                    tile2.style.left = (pairX + 15) + 'px';
+                    tile2.style.left = (pairX + 18) + 'px';
                     tile2.style.top = pairY + 'px';
                     tile2.textContent = '-1';
                     tile2.dataset.id = tileCounter++;
@@ -1604,11 +1586,11 @@
                     tile2.dataset.initial = 'false';
                     tile2.dataset.zone = 'zero-pairs';
                     zeroPairsContent.appendChild(tile2);
-                    
-                    pairX += 30;
+
+                    pairX += 36;
                     if ((i + 1) % 20 === 0) {
                         pairX = 50;
-                        pairY += 25;
+                        pairY += 30;
                     }
                 }
             }
